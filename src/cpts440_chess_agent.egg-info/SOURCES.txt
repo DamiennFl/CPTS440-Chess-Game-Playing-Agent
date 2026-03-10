@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+src/__init__.py
+src/board.py
+src/engine.py
+src/eval.py
+src/search.py
+src/ui.py
+src/cpts440_chess_agent.egg-info/PKG-INFO
+src/cpts440_chess_agent.egg-info/SOURCES.txt
+src/cpts440_chess_agent.egg-info/dependency_links.txt
+src/cpts440_chess_agent.egg-info/requires.txt
+src/cpts440_chess_agent.egg-info/top_level.txt
+tests/test_board.py
+tests/test_fen_fixtures.py
+tests/test_smoke.py

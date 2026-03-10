@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cpts440-chess-agent"
+version = "0.1.0"
+description = "Chess game-playing agent scaffolding for adversarial search experiments."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "python-chess==1.999",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.3.5",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
