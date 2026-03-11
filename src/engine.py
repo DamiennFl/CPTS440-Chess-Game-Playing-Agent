@@ -4,7 +4,7 @@ from typing import Optional
 
 import chess
 
-from src.search import choose_move as search_choose_move
+from src.search import SearchResult, choose_move as search_choose_move
 
 
 def choose_move(
@@ -12,7 +12,7 @@ def choose_move(
     *,
     time_limit: Optional[float] = None,
     depth: Optional[int] = None,
-) -> Optional[chess.Move]:
+) -> SearchResult:
     """Top-level engine hook for move selection."""
     return search_choose_move(board, time_limit=time_limit, depth=depth)
 

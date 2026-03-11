@@ -2,3 +2,4 @@
 __pycache__/
 *.pyc
 .venv/
+src/cpts440_chess_agent.egg-info/
