@@ -216,5 +216,6 @@ render();
 </html>"""
 
     out = Path(path)
+    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html, encoding="utf-8")
     return out.resolve()
