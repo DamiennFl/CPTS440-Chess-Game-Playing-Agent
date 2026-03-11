@@ -37,3 +37,6 @@ pytest
 - `src/engine.py`: top-level move selection orchestration
 - `src/ui.py`: simple command-line interface
 - `tests/`: smoke and correctness checks
+
+## Notes
+- Centipawn (scoring used for move evaluation): https://chess.fandom.com/wiki/Centipawn
