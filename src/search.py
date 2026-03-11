@@ -1,10 +1,21 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Optional, Tuple
 
 import chess
 
 from src import eval
+
+
+@dataclass(frozen=True)
+class SearchResult:
+    """Immutable container for the output of a search."""
+
+    move: Optional[chess.Move]
+    score: float
+    nodes: int
+    depth: int
 
 
 def order_moves(board: chess.Board) -> list[chess.Move]:
@@ -88,7 +99,7 @@ def choose_move(
     *,
     time_limit: Optional[float] = None,
     depth: Optional[int] = None,
-) -> Optional[chess.Move]:
+) -> SearchResult:
     """
     Top-level Week 2 move chooser using depth-limited minimax.
 
@@ -101,6 +112,11 @@ def choose_move(
     # node_counter is a single-item list so recursive calls can mutate it.
     node_counter = [0]
     maximizing = board.turn == chess.WHITE
-    _, best_move = minimax(board, search_depth, maximizing, node_counter=node_counter)
-    return best_move
+    best_score, best_move = minimax(board, search_depth, maximizing, node_counter=node_counter)
+    return SearchResult(
+        move=best_move,
+        score=best_score,
+        nodes=node_counter[0],
+        depth=search_depth,
+    )
 
