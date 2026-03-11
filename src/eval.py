@@ -19,9 +19,9 @@ def evaluate(board: chess.Board) -> float:
     """
     Return a heuristic score from White's perspective.
 
-    TO BE UPDATED LATER:
-    - Terminal positions return large-magnitude scores.
-    - Non-terminal positions use material balance (sum of piece values: White - Black).
+    Terminal positions return large-magnitude scores (checkmate) or 0 (draw).
+    Non-terminal positions use material balance (sum of piece values: White minus Black).
+    Future improvements may include positional evaluation (e.g., piece-square tables).
     """
     if board.is_checkmate(): # Checkmate is a terminal position with a large score from the perspective of the winning side.
         return -1_000_000.0 if board.turn == chess.WHITE else 1_000_000.0
