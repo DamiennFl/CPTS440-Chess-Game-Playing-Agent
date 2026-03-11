@@ -31,7 +31,7 @@ def test_start_position_material_is_balanced() -> None:
 
 
 def test_promoted_extra_queen_swings_score() -> None:
-    # White has promoted a pawn to gain an extra queen; Black only has king.
+    # White has an extra queen; Black only has a king.
     board = chess.Board("7k/8/8/8/8/8/8/KQ6 w - - 0 1")
     # White queen (900) + White king (0) vs Black king (0) => +900.
     assert eval.evaluate(board) == 900.0
