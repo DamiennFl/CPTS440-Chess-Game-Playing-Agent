@@ -103,7 +103,7 @@ PST: dict[int, list[int]] = {
 }
 
 
-def evaluate(board: chess.Board) -> float:
+def evaluate(board: chess.Board, *, use_pst: bool = True) -> float:
     """
     Return a heuristic score from White's perspective.
 
@@ -112,6 +112,10 @@ def evaluate(board: chess.Board) -> float:
     bonuses: each piece's value is its material worth plus a positional bonus
     that rewards good squares (center control, king safety, piece activity).
     Black's PST values are mirrored vertically via `square ^ 56`.
+
+    Args:
+        board: position to evaluate.
+        use_pst: if False, only material values are used (no positional bonus).
     """
     if board.is_checkmate():
         return -1_000_000.0 if board.turn == chess.WHITE else 1_000_000.0
@@ -121,8 +125,11 @@ def evaluate(board: chess.Board) -> float:
     score = 0
     for square, piece in board.piece_map().items():
         material = PIECE_VALUES[piece.piece_type]
-        pst_square = square if piece.color == chess.WHITE else square ^ 56
-        positional = PST[piece.piece_type][pst_square]
+        if use_pst:
+            pst_square = square if piece.color == chess.WHITE else square ^ 56
+            positional = PST[piece.piece_type][pst_square]
+        else:
+            positional = 0
         value = material + positional
         score += value if piece.color == chess.WHITE else -value
 
