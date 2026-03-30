@@ -22,7 +22,7 @@ PIECE_VALUES: dict[int, int] = {
 # perspective; for Black, the table is mirrored vertically via `square ^ 56`.
 #
 # Source: Simplified Evaluation Function (chessprogramming.org/Simplified_Evaluation_Function)
-# These are standard tuning constants and is not original creative work.
+# These are standard tuning constants and are not original creative work.
 # ---------------------------------------------------------------------------
 
 # fmt: off
@@ -91,6 +91,7 @@ PST_KING_MIDDLEGAME: list[int] = [
     -30,-40,-40,-50,-50,-40,-40,-30,
     -30,-40,-40,-50,-50,-40,-40,-30,
 ]
+# fmt: on
 
 # Map each piece type to its PST.
 PST: dict[int, list[int]] = {
