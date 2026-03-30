@@ -94,17 +94,96 @@ def minimax(
         return best_score, best_move
 
 
+def alphabeta(
+    board: chess.Board,
+    depth: int,
+    maximizing_player: bool,
+    *,
+    alpha: float = float("-inf"),
+    beta: float = float("inf"),
+    node_counter: Optional[list[int]] = None,
+) -> Tuple[float, Optional[chess.Move]]:
+    """
+    Depth-limited minimax search with alpha-beta pruning.
+
+    Args:
+        board: current chess position (mutated via push/pop during search).
+        depth: remaining plies to explore (0 == evaluate current node).
+        maximizing_player: True if the side to move is treated as the maximizing player.
+        alpha: best score the maximizing player can guarantee so far.
+        beta: best score the minimizing player can guarantee so far.
+        node_counter: optional single-element list used to count visited nodes for debugging/metrics.
+
+    Returns:
+        (score, best_move) where score is from White's perspective.
+        best_move is None for leaf/terminal nodes.
+    """
+    if node_counter is not None:
+        node_counter[0] += 1
+
+    if depth == 0 or board.is_game_over():
+        return eval.evaluate(board), None
+
+    legal_moves = order_moves(board)
+    if not legal_moves:
+        return eval.evaluate(board), None
+
+    best_move = None
+    if maximizing_player:
+        best_score = float("-inf")
+        for move in legal_moves:
+            board.push(move)
+            score, _ = alphabeta(
+                board,
+                depth - 1,
+                False,
+                alpha=alpha,
+                beta=beta,
+                node_counter=node_counter,
+            )
+            board.pop()
+            if score > best_score:
+                best_score = score
+                best_move = move
+            alpha = max(alpha, best_score)
+            if alpha >= beta:
+                break
+        return best_score, best_move
+
+    best_score = float("inf")
+    for move in legal_moves:
+        board.push(move)
+        score, _ = alphabeta(
+            board,
+            depth - 1,
+            True,
+            alpha=alpha,
+            beta=beta,
+            node_counter=node_counter,
+        )
+        board.pop()
+        if score < best_score:
+            best_score = score
+            best_move = move
+        beta = min(beta, best_score)
+        if alpha >= beta:
+            break
+    return best_score, best_move
+
+
 def choose_move(
     board: chess.Board,
     *,
     time_limit: Optional[float] = None,
     depth: Optional[int] = None,
+    use_alpha_beta: bool = True,
 ) -> SearchResult:
     """
-    Top-level Week 2 move chooser using depth-limited minimax.
+    Top-level move chooser using depth-limited minimax search.
 
     time_limit is currently unused (iterative deepening arrives in Week 5).
     depth defaults to DEFAULT_DEPTH when not supplied.
+    use_alpha_beta keeps plain minimax available for debugging and measurement.
     """
     del time_limit
     search_depth = depth if depth is not None else DEFAULT_DEPTH
@@ -112,11 +191,11 @@ def choose_move(
     # node_counter is a single-item list so recursive calls can mutate it.
     node_counter = [0]
     maximizing = board.turn == chess.WHITE
-    best_score, best_move = minimax(board, search_depth, maximizing, node_counter=node_counter)
+    search_fn = alphabeta if use_alpha_beta else minimax
+    best_score, best_move = search_fn(board, search_depth, maximizing, node_counter=node_counter)
     return SearchResult(
         move=best_move,
         score=best_score,
         nodes=node_counter[0],
         depth=search_depth,
     )
-

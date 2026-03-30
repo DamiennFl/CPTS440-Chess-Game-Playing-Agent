@@ -28,3 +28,24 @@ def test_minimax_handles_terminal_quickly() -> None:
     assert result.move is None  # No legal moves available.
     assert result.score == 0.0  # Stalemate is a draw.
     assert elapsed < 0.1
+
+
+def test_alpha_beta_matches_minimax_score() -> None:
+    board = chess.Board("r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 2 3")
+
+    minimax_result = search.choose_move(board.copy(stack=False), depth=3, use_alpha_beta=False)
+    alpha_beta_result = search.choose_move(board.copy(stack=False), depth=3, use_alpha_beta=True)
+
+    assert minimax_result.move is not None
+    assert alpha_beta_result.move is not None
+    assert minimax_result.score == alpha_beta_result.score
+
+
+def test_alpha_beta_reduces_node_expansion() -> None:
+    board = chess.Board("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4")
+
+    minimax_result = search.choose_move(board.copy(stack=False), depth=3, use_alpha_beta=False)
+    alpha_beta_result = search.choose_move(board.copy(stack=False), depth=3, use_alpha_beta=True)
+
+    assert alpha_beta_result.move is not None
+    assert minimax_result.nodes > alpha_beta_result.nodes

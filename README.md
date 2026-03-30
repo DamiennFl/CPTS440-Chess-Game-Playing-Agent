@@ -2,11 +2,11 @@
 
 Adversarial-search chess engine built on `python-chess`, currently at the Week 2 milestone:
 
-- Depth-limited minimax with simple move ordering
+- Depth-limited minimax with alpha-beta pruning and simple move ordering
 - Material-based evaluation (centipawns) and terminal scoring
 - AI-vs-AI driver with game logging and HTML replay export
 - Minimal CLI for FEN loading, listing/applying moves
-- Tests covering board helpers, evaluation, search sanity/perf, and engine plumbing
+- Tests covering board helpers, evaluation, search sanity/perf, engine plumbing, and node-expansion comparisons
 
 ## Setup
 
@@ -33,6 +33,10 @@ pip install -e ".[dev]"
   board = chess.Board()
   result = choose_move(board, depth=2)  # SearchResult with move/score/nodes/depth
   print(result.move, result.score, result.nodes)
+
+  # Optional comparison path for measuring pruning impact.
+  baseline = choose_move(board, depth=2, use_alpha_beta=False)
+  print(baseline.nodes, result.nodes)
   ```
 
 - AI vs AI + replay export
@@ -53,7 +57,7 @@ pytest
 ## Project Structure
 
 - `src/board.py`: board representation helpers and legal move utilities
-- `src/search.py`: depth-limited minimax, move ordering, SearchResult wrapper
+- `src/search.py`: depth-limited minimax, alpha-beta pruning, move ordering, SearchResult wrapper
 - `src/eval.py`: terminal handling + material evaluation (centipawns)
 - `src/engine.py`: top-level move selection; AI-vs-AI game runner
 - `src/viz.py`: HTML replay generator for GameRecord
