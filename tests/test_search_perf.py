@@ -1,6 +1,11 @@
+import sys
 import time
+from pathlib import Path
 
 import chess
+
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src import search
 
@@ -49,3 +54,9 @@ def test_alpha_beta_reduces_node_expansion() -> None:
 
     assert alpha_beta_result.move is not None
     assert minimax_result.nodes > alpha_beta_result.nodes
+
+
+if __name__ == "__main__":
+    import pytest
+
+    raise SystemExit(pytest.main([__file__]))
