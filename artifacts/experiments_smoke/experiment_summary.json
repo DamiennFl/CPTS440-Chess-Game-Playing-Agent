@@ -1,0 +1,107 @@
+[
+  {
+    "label": "baseline-vs-improved",
+    "strategy_a_label": "Baseline Minimax d3",
+    "strategy_b_label": "Improved AlphaBeta d3",
+    "games": 1,
+    "strategy_a_wins": 0,
+    "draws": 1,
+    "strategy_b_wins": 0,
+    "avg_plies": 160,
+    "avg_strategy_a_nodes": 520596,
+    "avg_strategy_b_nodes": 169390,
+    "avg_strategy_a_time": 24.324996500000225,
+    "avg_strategy_b_time": 8.122584700001653,
+    "games_detail": [
+      {
+        "matchup": "baseline-vs-improved",
+        "game_index": 1,
+        "opening_fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "strategy_a_label": "Baseline Minimax d3",
+        "strategy_b_label": "Improved AlphaBeta d3",
+        "white_label": "Baseline Minimax d3",
+        "black_label": "Improved AlphaBeta d3",
+        "result": "1/2-1/2",
+        "plies": 160,
+        "white_nodes": 520596,
+        "black_nodes": 169390,
+        "white_time": 24.324996500000225,
+        "black_time": 8.122584700001653,
+        "white_avg_nodes": 6507.45,
+        "black_avg_nodes": 2117.375,
+        "white_avg_time": 0.30406245625000283,
+        "black_avg_time": 0.10153230875002066
+      }
+    ]
+  },
+  {
+    "label": "depth-2-vs-depth-4",
+    "strategy_a_label": "Improved AlphaBeta d2",
+    "strategy_b_label": "Improved AlphaBeta d4",
+    "games": 1,
+    "strategy_a_wins": 0,
+    "draws": 0,
+    "strategy_b_wins": 1,
+    "avg_plies": 108,
+    "avg_strategy_a_nodes": 6681,
+    "avg_strategy_b_nodes": 553182,
+    "avg_strategy_a_time": 0.5870124000002761,
+    "avg_strategy_b_time": 67.26214470000082,
+    "games_detail": [
+      {
+        "matchup": "depth-2-vs-depth-4",
+        "game_index": 1,
+        "opening_fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "strategy_a_label": "Improved AlphaBeta d2",
+        "strategy_b_label": "Improved AlphaBeta d4",
+        "white_label": "Improved AlphaBeta d2",
+        "black_label": "Improved AlphaBeta d4",
+        "result": "0-1",
+        "plies": 108,
+        "white_nodes": 6681,
+        "black_nodes": 553182,
+        "white_time": 0.5870124000002761,
+        "black_time": 67.26214470000082,
+        "white_avg_nodes": 123.72222222222223,
+        "black_avg_nodes": 10244.111111111111,
+        "white_avg_time": 0.010870600000005113,
+        "black_avg_time": 1.2455952722222374
+      }
+    ]
+  },
+  {
+    "label": "depth-3-vs-iterative-time",
+    "strategy_a_label": "Improved AlphaBeta d3",
+    "strategy_b_label": "Improved Iterative 0.15s",
+    "games": 1,
+    "strategy_a_wins": 1,
+    "draws": 0,
+    "strategy_b_wins": 0,
+    "avg_plies": 85,
+    "avg_strategy_a_nodes": 88848,
+    "avg_strategy_b_nodes": 36822,
+    "avg_strategy_a_time": 6.477542200000244,
+    "avg_strategy_b_time": 6.3062132999996265,
+    "games_detail": [
+      {
+        "matchup": "depth-3-vs-iterative-time",
+        "game_index": 1,
+        "opening_fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "strategy_a_label": "Improved AlphaBeta d3",
+        "strategy_b_label": "Improved Iterative 0.15s",
+        "white_label": "Improved AlphaBeta d3",
+        "black_label": "Improved Iterative 0.15s",
+        "result": "1-0",
+        "plies": 85,
+        "white_nodes": 88848,
+        "black_nodes": 36822,
+        "white_time": 6.477542200000244,
+        "black_time": 6.3062132999996265,
+        "white_avg_nodes": 2066.232558139535,
+        "black_avg_nodes": 876.7142857142857,
+        "white_avg_time": 0.15064051627907543,
+        "black_avg_time": 0.15014793571427681
+      }
+    ]
+  }
+]

@@ -28,6 +28,7 @@ def export_game_html(game: GameRecord, path: str | Path) -> Path:
         "label": "Start",
         "score": "0",
         "nodes": "",
+      "elapsed": "",
     })
 
     # One frame per ply: show the board *after* the move with an arrow.
@@ -51,6 +52,7 @@ def export_game_html(game: GameRecord, path: str | Path) -> Path:
             "label": label,
             "score": f"{ply.score:+.0f}",
             "nodes": f"{ply.nodes:,}",
+          "elapsed": f"{ply.elapsed:.3f}s" if ply.elapsed else "",
         })
 
     frames_json = json.dumps(frames)
@@ -132,6 +134,7 @@ def export_game_html(game: GameRecord, path: str | Path) -> Path:
     <div>Move: <span id="move-label">Start</span></div>
     <div>Eval: <span id="eval-score">0</span> cp</div>
     <div>Nodes: <span id="node-count"></span></div>
+    <div>Time: <span id="elapsed-time"></span></div>
   </div>
   <div class="controls">
     <button id="btn-start" title="Go to start">⏮</button>
@@ -157,6 +160,7 @@ const boardEl    = document.getElementById('board-container');
 const labelEl    = document.getElementById('move-label');
 const scoreEl    = document.getElementById('eval-score');
 const nodesEl    = document.getElementById('node-count');
+const timeEl     = document.getElementById('elapsed-time');
 const playBtn    = document.getElementById('btn-play');
 const speedInput = document.getElementById('speed');
 const speedVal   = document.getElementById('speed-val');
@@ -167,6 +171,7 @@ function render() {{
   labelEl.textContent = f.label;
   scoreEl.textContent = f.score;
   nodesEl.textContent = f.nodes;
+  timeEl.textContent = f.elapsed;
 }}
 
 function stop() {{

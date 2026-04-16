@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<title>Week 6 Experiment Report</title>
+<style>
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+    background: linear-gradient(160deg, #0f172a, #111827 55%, #1f2937);
+    color: #f3f4f6;
+    padding: 2rem;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .subtitle { color: #cbd5e1; margin-bottom: 1.5rem; }
+  .card { background: rgba(15, 23, 42, 0.88); border: 1px solid #334155; border-radius: 16px; padding: 1.25rem; margin-bottom: 1.25rem; box-shadow: 0 10px 30px rgba(0,0,0,0.24); }
+  .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; align-items: start; }
+  table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  th, td { border-bottom: 1px solid #334155; padding: 0.6rem 0.5rem; text-align: center; }
+  th { color: #cbd5e1; font-weight: 600; }
+  h2, h3 { margin: 0 0 0.75rem 0; }
+  svg { max-width: 100%; height: auto; }
+</style>
+</head>
+<body>
+<div class='container'>
+  <h1>Week 6 AI-vs-AI Experiment Report</h1>
+  <p class='subtitle'>Structured matchup summaries with outcome distributions, average search effort, and per-game metrics.</p>
+  
+            <section class='card'>
+              <h2>baseline-vs-improved</h2>
+                            <p><strong>Strategy A:</strong> Baseline Minimax d3<br>
+                                 <strong>Strategy B:</strong> Improved AlphaBeta d3<br>
+                 <strong>Games:</strong> 1</p>
+              <div class='charts'>
+                <div>
+                  <h3>Results</h3>
+                  <svg width='520' height='180' viewBox='0 0 520 180'><g><rect x='20.0' y='150.0' width='133.3' height='0.0' rx='6' fill='#0f3460' /><text x='86.7' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Baseline Minimax d3</text><text x='86.7' y='144.0' fill='#e2b714' text-anchor='middle' font-size='12'>0.0</text></g><g><rect x='193.3' y='20.0' width='133.3' height='130.0' rx='6' fill='#0f3460' /><text x='260.0' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Draw</text><text x='260.0' y='14.0' fill='#e2b714' text-anchor='middle' font-size='12'>1.0</text></g><g><rect x='366.7' y='150.0' width='133.3' height='0.0' rx='6' fill='#0f3460' /><text x='433.3' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Improved AlphaBeta d3</text><text x='433.3' y='144.0' fill='#e2b714' text-anchor='middle' font-size='12'>0.0</text></g></svg>
+                </div>
+                <div>
+                  <h3>Average Move Time</h3>
+                  <svg width='520' height='180' viewBox='0 0 520 180'><g><rect x='20.0' y='20.0' width='220.0' height='130.0' rx='6' fill='#0f3460' /><text x='130.0' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Baseline Minimax d3</text><text x='130.0' y='14.0' fill='#e2b714' text-anchor='middle' font-size='12'>24.3</text></g><g><rect x='280.0' y='106.6' width='220.0' height='43.4' rx='6' fill='#0f3460' /><text x='390.0' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Improved AlphaBeta d3</text><text x='390.0' y='100.6' fill='#e2b714' text-anchor='middle' font-size='12'>8.1</text></g></svg>
+                </div>
+              </div>
+              <table>
+                                <tr><th>Strategy A wins</th><th>Draws</th><th>Strategy B wins</th><th>Avg plies</th><th>A nodes</th><th>B nodes</th></tr>
+                <tr>
+                                    <td>0</td>
+                  <td>1</td>
+                                    <td>0</td>
+                  <td>160.0</td>
+                                    <td>520596.0</td>
+                                    <td>169390.0</td>
+                </tr>
+              </table>
+            </section>
+            
+
+            <section class='card'>
+              <h2>depth-2-vs-depth-4</h2>
+                            <p><strong>Strategy A:</strong> Improved AlphaBeta d2<br>
+                                 <strong>Strategy B:</strong> Improved AlphaBeta d4<br>
+                 <strong>Games:</strong> 1</p>
+              <div class='charts'>
+                <div>
+                  <h3>Results</h3>
+                  <svg width='520' height='180' viewBox='0 0 520 180'><g><rect x='20.0' y='150.0' width='133.3' height='0.0' rx='6' fill='#0f3460' /><text x='86.7' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Improved AlphaBeta d2</text><text x='86.7' y='144.0' fill='#e2b714' text-anchor='middle' font-size='12'>0.0</text></g><g><rect x='193.3' y='150.0' width='133.3' height='0.0' rx='6' fill='#0f3460' /><text x='260.0' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Draw</text><text x='260.0' y='144.0' fill='#e2b714' text-anchor='middle' font-size='12'>0.0</text></g><g><rect x='366.7' y='20.0' width='133.3' height='130.0' rx='6' fill='#0f3460' /><text x='433.3' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Improved AlphaBeta d4</text><text x='433.3' y='14.0' fill='#e2b714' text-anchor='middle' font-size='12'>1.0</text></g></svg>
+                </div>
+                <div>
+                  <h3>Average Move Time</h3>
+                  <svg width='520' height='180' viewBox='0 0 520 180'><g><rect x='20.0' y='148.9' width='220.0' height='1.1' rx='6' fill='#0f3460' /><text x='130.0' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Improved AlphaBeta d2</text><text x='130.0' y='142.9' fill='#e2b714' text-anchor='middle' font-size='12'>0.6</text></g><g><rect x='280.0' y='20.0' width='220.0' height='130.0' rx='6' fill='#0f3460' /><text x='390.0' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Improved AlphaBeta d4</text><text x='390.0' y='14.0' fill='#e2b714' text-anchor='middle' font-size='12'>67.3</text></g></svg>
+                </div>
+              </div>
+              <table>
+                                <tr><th>Strategy A wins</th><th>Draws</th><th>Strategy B wins</th><th>Avg plies</th><th>A nodes</th><th>B nodes</th></tr>
+                <tr>
+                                    <td>0</td>
+                  <td>0</td>
+                                    <td>1</td>
+                  <td>108.0</td>
+                                    <td>6681.0</td>
+                                    <td>553182.0</td>
+                </tr>
+              </table>
+            </section>
+            
+
+            <section class='card'>
+              <h2>depth-3-vs-iterative-time</h2>
+                            <p><strong>Strategy A:</strong> Improved AlphaBeta d3<br>
+                                 <strong>Strategy B:</strong> Improved Iterative 0.15s<br>
+                 <strong>Games:</strong> 1</p>
+              <div class='charts'>
+                <div>
+                  <h3>Results</h3>
+                  <svg width='520' height='180' viewBox='0 0 520 180'><g><rect x='20.0' y='20.0' width='133.3' height='130.0' rx='6' fill='#0f3460' /><text x='86.7' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Improved AlphaBeta d3</text><text x='86.7' y='14.0' fill='#e2b714' text-anchor='middle' font-size='12'>1.0</text></g><g><rect x='193.3' y='150.0' width='133.3' height='0.0' rx='6' fill='#0f3460' /><text x='260.0' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Draw</text><text x='260.0' y='144.0' fill='#e2b714' text-anchor='middle' font-size='12'>0.0</text></g><g><rect x='366.7' y='150.0' width='133.3' height='0.0' rx='6' fill='#0f3460' /><text x='433.3' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Improved Iterative 0.15s</text><text x='433.3' y='144.0' fill='#e2b714' text-anchor='middle' font-size='12'>0.0</text></g></svg>
+                </div>
+                <div>
+                  <h3>Average Move Time</h3>
+                  <svg width='520' height='180' viewBox='0 0 520 180'><g><rect x='20.0' y='20.0' width='220.0' height='130.0' rx='6' fill='#0f3460' /><text x='130.0' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Improved AlphaBeta d3</text><text x='130.0' y='14.0' fill='#e2b714' text-anchor='middle' font-size='12'>6.5</text></g><g><rect x='280.0' y='23.4' width='220.0' height='126.6' rx='6' fill='#0f3460' /><text x='390.0' y='170' fill='#e0e0e0' text-anchor='middle' font-size='12'>Improved Iterative 0.15s</text><text x='390.0' y='17.4' fill='#e2b714' text-anchor='middle' font-size='12'>6.3</text></g></svg>
+                </div>
+              </div>
+              <table>
+                                <tr><th>Strategy A wins</th><th>Draws</th><th>Strategy B wins</th><th>Avg plies</th><th>A nodes</th><th>B nodes</th></tr>
+                <tr>
+                                    <td>1</td>
+                  <td>0</td>
+                                    <td>0</td>
+                  <td>85.0</td>
+                                    <td>88848.0</td>
+                                    <td>36822.0</td>
+                </tr>
+              </table>
+            </section>
+            
+</div>
+</body>
+</html>

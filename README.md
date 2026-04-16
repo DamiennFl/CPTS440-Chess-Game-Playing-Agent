@@ -5,6 +5,7 @@ Adversarial-search chess engine built on `python-chess`, currently at the Weekâ€
 - Depth-limited minimax with alpha-beta pruning and simple move ordering
 - Material-based evaluation (centipawns) and terminal scoring
 - AI-vs-AI driver with game logging and HTML replay export
+- Structured experiment runner for baseline-vs-improved and depth/time matrices
 - Minimal CLI for FEN loading, listing/applying moves
 - Tests covering board helpers, evaluation, search sanity/perf, engine plumbing, and node-expansion comparisons
 
@@ -48,6 +49,15 @@ pip install -e ".[dev]"
   export_game_html(game, "out/game.html")  # Open in browser to step through moves
   ```
 
+- Week 6 experiments + report generation
+  ```python
+  from src.experiments import build_week6_default_matchups, run_matchups, write_metrics_bundle
+
+  summaries = run_matchups(build_week6_default_matchups(games=100))
+  paths = write_metrics_bundle(summaries, "artifacts/experiments")
+  print(paths["html"])  # Open the experiment report in a browser
+  ```
+
 ## Test
 
 ```bash
@@ -61,9 +71,17 @@ pytest
 - `src/eval.py`: terminal handling + material evaluation (centipawns)
 - `src/engine.py`: top-level move selection; AI-vs-AI game runner
 - `src/viz.py`: HTML replay generator for GameRecord
+- `src/experiments.py`: structured AI-vs-AI batch runner and HTML/CSV/JSON report generation
 - `src/ui.py`: simple command-line interface
 - `tests/`: smoke and correctness checks
 - `demo.ipynb`: notebook scratchpad for quick experiments
+
+## Week 6 / Week 7 Deliverables
+
+- Week 6: run the structured matchup matrix, export `artifacts/experiments/experiment_summary.json`, `experiment_summary.csv`, and `experiment_report.html`.
+- Week 7: finalize the notebook flow in `demo.ipynb`, reuse the generated HTML report and replay artifacts in the presentation, and keep the report claims aligned with the exported metrics.
+- Week 7 slides: use [PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md) as the slide sequence and rehearsal checklist.
+- Practice presentation: use the notebook sections as the demo script and rehearse with the generated HTML report open side-by-side.
 
 ## Notes
 - Centipawn (scoring used for move evaluation): https://chess.fandom.com/wiki/Centipawn

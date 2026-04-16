@@ -13,9 +13,17 @@ def choose_move(
     *,
     time_limit: Optional[float] = None,
     depth: Optional[int] = None,
+    use_alpha_beta: bool = True,
 ) -> SearchResult:
     """Top-level engine hook for move selection."""
-    return search_choose_move(board, time_limit=time_limit, depth=depth)
+    # Week 5/6 passthrough: preserve search configuration for experiments
+    # (fixed depth vs time-limited iterative deepening, and AB vs minimax).
+    return search_choose_move(
+        board,
+        time_limit=time_limit,
+        depth=depth,
+        use_alpha_beta=use_alpha_beta,
+    )
 
 
 @dataclass
@@ -26,6 +34,8 @@ class PlayRecord:
     move_uci: str
     score: float
     nodes: int
+    # Week 6 telemetry: per-move search time for experiment and replay reporting.
+    elapsed: float = 0.0
 
 
 @dataclass
@@ -40,6 +50,8 @@ class GameRecord:
 def play_game(
     *,
     depth: int = 2,
+    time_limit: Optional[float] = None,
+    use_alpha_beta: bool = True,
     max_moves: int = 150,
     fen: str = chess.STARTING_FEN,
 ) -> GameRecord:
@@ -48,6 +60,8 @@ def play_game(
 
     Args:
         depth: search depth in plies for both sides.
+        time_limit: optional time budget per move in seconds.
+        use_alpha_beta: choose between alpha-beta pruning and plain minimax.
         max_moves: maximum number of full moves before stopping.
         fen: starting position in FEN notation.
 
@@ -61,7 +75,12 @@ def play_game(
         if board.is_game_over():
             break
 
-        result = choose_move(board, depth=depth)
+        result = choose_move(
+            board,
+            depth=depth,
+            time_limit=time_limit,
+            use_alpha_beta=use_alpha_beta,
+        )
         if result.move is None:
             break
 
@@ -71,6 +90,7 @@ def play_game(
                 move_uci=result.move.uci(),
                 score=result.score,
                 nodes=result.nodes,
+                elapsed=result.elapsed,
             )
         )
         board.push(result.move)

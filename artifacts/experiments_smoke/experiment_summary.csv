@@ -1,0 +1,4 @@
+matchup,games,strategy_a_wins,draws,strategy_b_wins,avg_plies,avg_strategy_a_nodes,avg_strategy_b_nodes,avg_strategy_a_time,avg_strategy_b_time
+baseline-vs-improved,1,0,1,0,160.00,520596.00,169390.00,24.3250,8.1226
+depth-2-vs-depth-4,1,0,0,1,108.00,6681.00,553182.00,0.5870,67.2621
+depth-3-vs-iterative-time,1,1,0,0,85.00,88848.00,36822.00,6.4775,6.3062

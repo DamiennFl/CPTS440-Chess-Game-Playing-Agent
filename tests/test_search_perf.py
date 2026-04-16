@@ -56,6 +56,44 @@ def test_alpha_beta_reduces_node_expansion() -> None:
     assert minimax_result.nodes > alpha_beta_result.nodes
 
 
+def test_iterative_deepening_respects_depth_cap() -> None:
+    board = chess.Board()
+
+    fixed_depth = search.choose_move(board.copy(stack=False), depth=3, use_alpha_beta=True)
+    time_limited = search.choose_move(
+        board.copy(stack=False),
+        depth=3,
+        time_limit=0.5,
+        use_alpha_beta=True,
+    )
+
+    assert fixed_depth.move is not None
+    assert time_limited.move is not None
+    assert time_limited.depth == 3
+    assert time_limited.score == fixed_depth.score
+
+
+def test_time_limited_search_returns_legal_fallback_when_budget_is_zero() -> None:
+    board = chess.Board()
+    result = search.choose_move(board, depth=5, time_limit=0.0, use_alpha_beta=True)
+
+    assert result.move is not None
+    assert result.move in board.legal_moves
+    assert result.depth == 0
+
+
+def test_ordering_prefers_high_value_capture_with_low_value_attacker() -> None:
+    # White has two captures on e5: Nxe5 (captures queen with knight) and Qxe5 (captures queen with queen).
+    board = chess.Board("k7/8/8/4q3/2N1Q3/8/8/7K w - - 0 1")
+    ordered = search.order_moves(board)
+
+    assert ordered
+    uci_order = [move.uci() for move in ordered]
+    assert "c4e5" in uci_order
+    assert "e4e5" in uci_order
+    assert uci_order.index("c4e5") < uci_order.index("e4e5")
+
+
 if __name__ == "__main__":
     import pytest
 
