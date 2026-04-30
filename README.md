@@ -26,6 +26,19 @@ pip install -e ".[dev]"
   python -m src.ui --fen "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1" --apply e1g1
   ```
 
+- CLI (play against the AI interactively)
+  ```bash
+  # Play as White against depth-2 AI
+  python -m src.ui --mode human
+
+  # Play as Black against depth-3 AI
+  python -m src.ui --mode human --color black --depth 3
+
+  # Start from a custom position
+  python -m src.ui --mode human --fen "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
+  ```
+  Enter moves in UCI notation (e.g. `e7e5`). Type `resign` to end the game.
+
 - Programmatic search
   ```python
   import chess
@@ -72,7 +85,7 @@ pytest
 - `src/engine.py`: top-level move selection; AI-vs-AI game runner
 - `src/viz.py`: HTML replay generator for GameRecord
 - `src/experiments.py`: structured AI-vs-AI batch runner and HTML/CSV/JSON report generation
-- `src/ui.py`: simple command-line interface
+- `src/ui.py`: command-line interface — board inspection (`--mode inspect`) and interactive human-vs-AI play (`--mode human`)
 - `tests/`: smoke and correctness checks
 - `demo.ipynb`: notebook scratchpad for quick experiments
 
