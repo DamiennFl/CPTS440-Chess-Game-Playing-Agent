@@ -35,8 +35,9 @@ class PlayRecord:
     move_uci: str
     score: float
     nodes: int
-    # Week 6 telemetry: per-move search time for experiment and replay reporting.
+    # Week 6 telemetry: per-move search time and depth for experiment and replay reporting.
     elapsed: float = 0.0
+    depth: int = 0
 
 
 @dataclass
@@ -95,6 +96,7 @@ def play_game(
                 score=result.score,
                 nodes=result.nodes,
                 elapsed=result.elapsed,
+                depth=result.depth,
             )
         )
         board.push(result.move)
@@ -171,6 +173,7 @@ def play_human_vs_ai(
                         score=0.0,
                         nodes=0,
                         elapsed=0.0,
+                        depth=0,
                     )
                 )
                 board.push(move)
@@ -193,6 +196,7 @@ def play_human_vs_ai(
                     score=result.score,
                     nodes=result.nodes,
                     elapsed=result.elapsed,
+                    depth=result.depth,
                 )
             )
             board.push(result.move)
