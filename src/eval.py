@@ -137,6 +137,82 @@ def _is_endgame(board: chess.Board) -> bool:
     return total <= _ENDGAME_MATERIAL_THRESHOLD
 
 
+# Pawn structure penalty/bonus constants (centipawns).
+_DOUBLED_PAWN_PENALTY  = -20   # per extra pawn beyond the first on a file
+_ISOLATED_PAWN_PENALTY = -15   # per pawn with no friendly pawn on adjacent files
+_PASSED_PAWN_BONUS     =  20   # per pawn with no enemy pawns blocking or attacking ahead
+
+
+def _pawn_structure_score(board: chess.Board, color: chess.Color) -> int:
+    """
+    Return a pawn-structure score (in centipawns) for *one* side.
+
+    Three terms are evaluated in a single pass over the pawn bitboard:
+
+    * **Doubled pawns:** more than one friendly pawn on the same file.
+      Each extra pawn beyond the first incurs _DOUBLED_PAWN_PENALTY.
+    * **Isolated pawns:** a pawn with no friendly pawn on either adjacent
+      file.  Each such pawn incurs _ISOLATED_PAWN_PENALTY.
+    * **Passed pawns:** a pawn that has no enemy pawn on the same file or
+      either adjacent file *ahead* of it (from the moving side's perspective).
+      Each such pawn earns _PASSED_PAWN_BONUS.
+
+    The score is always from the perspective of `color` (positive = good for
+    that side).  The caller is responsible for negating when needed.
+    """
+    enemy = not color
+
+    friendly_pawns: dict[int, list[int]] = {}  # file -> list of ranks
+    enemy_pawn_files: set[int] = set()
+
+    for square, piece in board.piece_map().items():
+        if piece.piece_type != chess.PAWN:
+            continue
+        file = chess.square_file(square)
+        rank = chess.square_rank(square)
+        if piece.color == color:
+            friendly_pawns.setdefault(file, []).append(rank)
+        else:
+            enemy_pawn_files.add(file)
+
+    score = 0
+    for file, ranks in friendly_pawns.items():
+        # Doubled pawn penalty
+        if len(ranks) > 1:
+            score += (len(ranks) - 1) * _DOUBLED_PAWN_PENALTY
+
+        # Isolated pawn penalty (per pawn on this file)
+        has_neighbor = (file - 1) in friendly_pawns or (file + 1) in friendly_pawns
+        if not has_neighbor:
+            score += len(ranks) * _ISOLATED_PAWN_PENALTY
+
+        # Passed pawn bonus (per pawn on this file)
+        # Enemy pawns on the same or adjacent files that are "ahead" would block.
+        blocking_files = {file - 1, file, file + 1} & enemy_pawn_files
+        for rank in ranks:
+            # Ahead means higher ranks for White, lower ranks for Black.
+            if color == chess.WHITE:
+                enemy_ahead = any(
+                    chess.square_rank(sq) > rank
+                    for sq, pc in board.piece_map().items()
+                    if pc.piece_type == chess.PAWN
+                    and pc.color == enemy
+                    and chess.square_file(sq) in blocking_files
+                )
+            else:
+                enemy_ahead = any(
+                    chess.square_rank(sq) < rank
+                    for sq, pc in board.piece_map().items()
+                    if pc.piece_type == chess.PAWN
+                    and pc.color == enemy
+                    and chess.square_file(sq) in blocking_files
+                )
+            if not enemy_ahead:
+                score += _PASSED_PAWN_BONUS
+
+    return score
+
+
 def evaluate(board: chess.Board, *, use_pst: bool = True) -> float:
     """
     Return a heuristic score from White's perspective.
