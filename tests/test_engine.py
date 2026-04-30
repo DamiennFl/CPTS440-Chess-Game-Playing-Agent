@@ -3,7 +3,7 @@ from pathlib import Path
 
 import chess
 
-from src.engine import GameRecord, PlayRecord, play_game
+from src.engine import GameRecord, PlayRecord, play_game, play_human_vs_ai
 from src.viz import export_game_html
 
 
@@ -100,3 +100,98 @@ def test_play_game_asymmetric_depth_produces_valid_record() -> None:
         assert chess.Move.from_uci(ply.move_uci) in board.legal_moves
         assert ply.nodes > 0
         assert ply.elapsed >= 0.0
+
+
+def test_human_vs_ai_human_moves_are_recorded() -> None:
+    # Human plays White. Feed two moves then resign.
+    # The moves lead to a legal 2-ply human sequence; the AI replies after
+    # the first human move (depth=1 so it's fast).
+    moves = iter(["e2e4", "d2d4", "resign"])
+    printed: list[str] = []
+
+    record = play_human_vs_ai(
+        human_color=chess.WHITE,
+        ai_depth=1,
+        max_moves=10,
+        input_fn=lambda _: next(moves),
+        print_fn=printed.append,
+    )
+
+    # Resign ends immediately with the correct result.
+    assert record.result == "0-1"
+    # At least the first human move (e2e4) must be recorded.
+    assert any(p.move_uci == "e2e4" for p in record.plies)
+
+
+def test_human_vs_ai_rejects_illegal_move_then_accepts_legal() -> None:
+    # First input is illegal UCI, second is legal. Only the legal move is recorded.
+    moves = iter(["e2e5", "e2e4", "resign"])
+    printed: list[str] = []
+
+    record = play_human_vs_ai(
+        human_color=chess.WHITE,
+        ai_depth=1,
+        max_moves=5,
+        input_fn=lambda _: next(moves),
+        print_fn=printed.append,
+    )
+
+    assert record.result == "0-1"
+    # Illegal move must NOT appear in the record.
+    assert not any(p.move_uci == "e2e5" for p in record.plies)
+    # Legal move must appear.
+    assert any(p.move_uci == "e2e4" for p in record.plies)
+    # A "Try again" message must have been printed.
+    assert any("Illegal" in msg or "Try again" in msg for msg in printed)
+
+
+def test_human_vs_ai_rejects_bad_uci_notation() -> None:
+    # First input is not valid UCI notation.
+    moves = iter(["notamove", "e2e4", "resign"])
+    printed: list[str] = []
+
+    play_human_vs_ai(
+        human_color=chess.WHITE,
+        ai_depth=1,
+        max_moves=5,
+        input_fn=lambda _: next(moves),
+        print_fn=printed.append,
+    )
+
+    assert any("Invalid" in msg or "notation" in msg for msg in printed)
+
+
+def test_human_vs_ai_ply_fields_consistent() -> None:
+    # Play two human moves then resign; verify each recorded ply is self-consistent.
+    moves = iter(["e2e4", "d2d4", "resign"])
+
+    record = play_human_vs_ai(
+        human_color=chess.WHITE,
+        ai_depth=1,
+        max_moves=10,
+        input_fn=lambda _: next(moves),
+        print_fn=lambda _: None,
+    )
+
+    for ply in record.plies:
+        board = chess.Board(ply.fen_before)
+        assert chess.Move.from_uci(ply.move_uci) in board.legal_moves
+
+
+def test_human_vs_ai_plays_as_black() -> None:
+    # Human plays Black; AI (White) moves first, then human responds.
+    # Feed one move then resign.
+    moves = iter(["e7e5", "resign"])
+
+    record = play_human_vs_ai(
+        human_color=chess.BLACK,
+        ai_depth=1,
+        max_moves=5,
+        input_fn=lambda _: next(moves),
+        print_fn=lambda _: None,
+    )
+
+    # Resign as Black → White wins.
+    assert record.result == "1-0"
+    # At least the AI's first White move must be recorded.
+    assert len(record.plies) >= 1
