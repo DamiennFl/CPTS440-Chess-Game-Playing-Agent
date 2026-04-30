@@ -242,6 +242,51 @@ def _mobility_score(board: chess.Board) -> int:
     return (white_moves - black_moves) * _MOBILITY_BONUS_PER_MOVE
 
 
+# King safety penalty constants (centipawns).
+_OPEN_FILE_KING_PENALTY      = -25   # no pawns at all on the king's file
+_HALF_OPEN_FILE_KING_PENALTY = -10   # only enemy pawns on the king's file (semi-open)
+
+
+def _king_safety_score(board: chess.Board, color: chess.Color) -> int:
+    """
+    Return a king-safety score (centipawns) for *one* side.
+
+    Scans the three files around the king (king file ± 1, clamped to a–h)
+    and penalises each file that lacks a friendly pawn shield:
+
+    * Open file: no pawns of either colour → _OPEN_FILE_KING_PENALTY
+    * Half-open file: only enemy pawns present → _HALF_OPEN_FILE_KING_PENALTY
+
+    Files that have at least one friendly pawn are fine and score 0.
+    The score is from the perspective of `color` (negative = bad for that side).
+    """
+    king_square = board.king(color)
+    if king_square is None:
+        return 0  # shouldn't happen in a legal position
+
+    king_file = chess.square_file(king_square)
+    score = 0
+
+    for f in range(max(0, king_file - 1), min(7, king_file + 1) + 1):
+        friendly_on_file = any(
+            pc.piece_type == chess.PAWN and pc.color == color
+            for sq, pc in board.piece_map().items()
+            if chess.square_file(sq) == f
+        )
+        enemy_on_file = any(
+            pc.piece_type == chess.PAWN and pc.color != color
+            for sq, pc in board.piece_map().items()
+            if chess.square_file(sq) == f
+        )
+
+        if not friendly_on_file and not enemy_on_file:
+            score += _OPEN_FILE_KING_PENALTY
+        elif not friendly_on_file and enemy_on_file:
+            score += _HALF_OPEN_FILE_KING_PENALTY
+
+    return score
+
+
 def evaluate(board: chess.Board, *, use_pst: bool = True) -> float:
     """
     Return a heuristic score from White's perspective.
