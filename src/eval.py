@@ -91,6 +91,20 @@ PST_KING_MIDDLEGAME: list[int] = [
     -30,-40,-40,-50,-50,-40,-40,-30,
     -30,-40,-40,-50,-50,-40,-40,-30,
 ]
+
+# King endgame PST — rewards an active, centralised king.
+# Values are from White's perspective; Black mirrors via `square ^ 56`.
+# Source: Simplified Evaluation Function (chessprogramming.org/Simplified_Evaluation_Function)
+PST_KING_ENDGAME: list[int] = [
+    -50,-30,-30,-30,-30,-30,-30,-50,
+    -30,-30,  0,  0,  0,  0,-30,-30,
+    -30,-10, 20, 30, 30, 20,-10,-30,
+    -30,-10, 30, 40, 40, 30,-10,-30,
+    -30,-10, 30, 40, 40, 30,-10,-30,
+    -30,-10, 20, 30, 30, 20,-10,-30,
+    -30,-20,-10,  0,  0,-10,-20,-30,
+    -50,-40,-30,-20,-20,-30,-40,-50,
+]
 # fmt: on
 
 # Map each piece type to its PST.
