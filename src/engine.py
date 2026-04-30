@@ -48,6 +48,46 @@ class GameRecord:
     final_fen: str = chess.STARTING_FEN
     result: str = "*"
 
+    # ------------------------------------------------------------------
+    # Aggregate telemetry computed from plies, read-only.
+    # Human-move plies have elapsed=0 and depth=0 and are excluded from
+    # AI-only aggregates (avg_depth) but included in timing totals.
+    # ------------------------------------------------------------------
+
+    @property
+    def total_time_ms(self) -> float:
+        """Total wall-clock time across all plies, in milliseconds."""
+        return sum(p.elapsed for p in self.plies) * 1000.0
+
+    @property
+    def avg_time_ms(self) -> float:
+        """Average wall-clock time per ply, in milliseconds. 0.0 if no plies."""
+        if not self.plies:
+            return 0.0
+        return self.total_time_ms / len(self.plies)
+
+    @property
+    def avg_nodes(self) -> float:
+        """Average nodes searched per ply. 0.0 if no plies."""
+        if not self.plies:
+            return 0.0
+        return sum(p.nodes for p in self.plies) / len(self.plies)
+
+    @property
+    def peak_nodes(self) -> int:
+        """Maximum nodes searched in a single ply. 0 if no plies."""
+        if not self.plies:
+            return 0
+        return max(p.nodes for p in self.plies)
+
+    @property
+    def avg_depth(self) -> float:
+        """Average search depth across AI plies (depth > 0). 0.0 if none."""
+        ai_plies = [p for p in self.plies if p.depth > 0]
+        if not ai_plies:
+            return 0.0
+        return sum(p.depth for p in ai_plies) / len(ai_plies)
+
 
 def play_game(
     *,
