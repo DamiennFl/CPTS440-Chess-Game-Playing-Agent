@@ -20,13 +20,13 @@ def parse_args() -> argparse.Namespace:
         default="inspect",
         help="'inspect' shows the board and legal moves; 'human' starts an interactive game against the AI.",
     )
-    # --- inspect-mode options ---
+    # inspect-mode options
     parser.add_argument(
         "--apply",
         default=None,
         help="(inspect mode) Optional UCI move to apply (e.g., e2e4 or a7a8q for promotion).",
     )
-    # --- human-mode options ---
+    # human-mode options
     parser.add_argument(
         "--color",
         choices=["white", "black"],
