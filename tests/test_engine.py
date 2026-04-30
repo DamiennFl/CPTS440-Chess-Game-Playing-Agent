@@ -36,6 +36,9 @@ def test_play_game_ply_fields_are_consistent() -> None:
         assert chess.Move.from_uci(ply.move_uci) in board.legal_moves
         # Node count must be positive (at least the root was visited).
         assert ply.nodes > 0
+        # Depth must be non-negative and match the configured search depth.
+        assert ply.depth >= 0
+        assert ply.elapsed >= 0.0
 
 
 def test_play_game_final_fen_matches_plies_applied() -> None:
@@ -100,6 +103,21 @@ def test_play_game_asymmetric_depth_produces_valid_record() -> None:
         assert chess.Move.from_uci(ply.move_uci) in board.legal_moves
         assert ply.nodes > 0
         assert ply.elapsed >= 0.0
+
+
+def test_game_record_aggregates_are_sane() -> None:
+    record = play_game(white_depth=1, black_depth=1, max_moves=5)
+
+    assert len(record.plies) >= 1
+    # Timing
+    assert record.total_time_ms >= 0.0
+    assert record.avg_time_ms >= 0.0
+    # Nodes
+    assert record.avg_nodes > 0
+    assert record.peak_nodes > 0
+    assert record.peak_nodes >= record.avg_nodes
+    # Depth where all plies are AI so avg_depth must equal configured depth (1).
+    assert record.avg_depth == 1.0
 
 
 def test_human_vs_ai_human_moves_are_recorded() -> None:
