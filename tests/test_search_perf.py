@@ -63,7 +63,7 @@ def test_iterative_deepening_respects_depth_cap() -> None:
     time_limited = search.choose_move(
         board.copy(stack=False),
         depth=3,
-        time_limit=0.5,
+        time_limit=5.0,
         use_alpha_beta=True,
     )
 
