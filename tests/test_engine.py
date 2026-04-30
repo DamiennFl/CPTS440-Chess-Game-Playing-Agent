@@ -10,7 +10,7 @@ from src.viz import export_game_html
 def test_play_game_from_terminal_fen_produces_empty_plies() -> None:
     # Starting from a stalemate position: no moves available, loop exits immediately.
     stalemate_fen = "7k/5Q2/6K1/8/8/8/8/8 b - - 0 1"
-    record = play_game(depth=1, max_moves=10, fen=stalemate_fen)
+    record = play_game(white_depth=1, black_depth=1, max_moves=10, fen=stalemate_fen)
 
     assert record.plies == []
     assert record.final_fen == stalemate_fen
@@ -19,14 +19,14 @@ def test_play_game_from_terminal_fen_produces_empty_plies() -> None:
 
 
 def test_play_game_one_full_move_produces_two_plies() -> None:
-    record = play_game(depth=1, max_moves=1)
+    record = play_game(white_depth=1, black_depth=1, max_moves=1)
 
     # max_moves=1 means one full move, unless the game ends sooner.
     assert 1 <= len(record.plies) <= 2
 
 
 def test_play_game_ply_fields_are_consistent() -> None:
-    record = play_game(depth=1, max_moves=3)
+    record = play_game(white_depth=1, black_depth=1, max_moves=3)
 
     for ply in record.plies:
         # FEN must be parseable.
@@ -39,7 +39,7 @@ def test_play_game_ply_fields_are_consistent() -> None:
 
 
 def test_play_game_final_fen_matches_plies_applied() -> None:
-    record = play_game(depth=1, max_moves=4)
+    record = play_game(white_depth=1, black_depth=1, max_moves=4)
 
     # Replay all recorded moves from the start and verify we reach final_fen.
     board = chess.Board(record.plies[0].fen_before) if record.plies else chess.Board()
@@ -50,7 +50,7 @@ def test_play_game_final_fen_matches_plies_applied() -> None:
 
 
 def test_export_game_html_creates_file() -> None:
-    record = play_game(depth=1, max_moves=2)
+    record = play_game(white_depth=1, black_depth=1, max_moves=2)
 
     with tempfile.TemporaryDirectory() as tmp:
         out = export_game_html(record, Path(tmp) / "replay.html")
@@ -58,7 +58,7 @@ def test_export_game_html_creates_file() -> None:
 
 
 def test_export_game_html_contains_expected_markers() -> None:
-    record = play_game(depth=1, max_moves=2)
+    record = play_game(white_depth=1, black_depth=1, max_moves=2)
 
     with tempfile.TemporaryDirectory() as tmp:
         out = export_game_html(record, Path(tmp) / "replay.html")

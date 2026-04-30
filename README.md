@@ -45,7 +45,7 @@ pip install -e ".[dev]"
   from src.engine import play_game
   from src.viz import export_game_html
 
-  game = play_game(depth=2, max_moves=50)
+  game = play_game(white_depth=2, black_depth=2, max_moves=50)
   export_game_html(game, "out/game.html")  # Open in browser to step through moves
   ```
 

@@ -49,7 +49,8 @@ class GameRecord:
 
 def play_game(
     *,
-    depth: int = 2,
+    white_depth: int = 2,
+    black_depth: int = 2,
     time_limit: Optional[float] = None,
     use_alpha_beta: bool = True,
     max_moves: int = 150,
@@ -59,7 +60,8 @@ def play_game(
     Run an AI-vs-AI game and return a structured record.
 
     Args:
-        depth: search depth in plies for both sides.
+        white_depth: search depth in plies for White.
+        black_depth: search depth in plies for Black.
         time_limit: optional time budget per move in seconds.
         use_alpha_beta: choose between alpha-beta pruning and plain minimax.
         max_moves: maximum number of full moves before stopping.
@@ -75,9 +77,10 @@ def play_game(
         if board.is_game_over(claim_draw=True):
             break
 
+        side_depth = white_depth if board.turn == chess.WHITE else black_depth
         result = choose_move(
             board,
-            depth=depth,
+            depth=side_depth,
             time_limit=time_limit,
             use_alpha_beta=use_alpha_beta,
         )

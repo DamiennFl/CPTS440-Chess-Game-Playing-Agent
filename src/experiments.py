@@ -119,7 +119,7 @@ def _play_single_game(
     record = GameRecord()
 
     for _ in range(max_moves * 2):
-        if board.is_game_over():
+        if board.is_game_over(claim_draw=True):
             break
 
         spec = white if board.turn == chess.WHITE else black
@@ -129,7 +129,7 @@ def _play_single_game(
             time_limit=spec.time_limit,
             use_alpha_beta=spec.use_alpha_beta,
         )
-        if result.move is None:
+        if result.move is None or board.can_claim_draw():
             break
 
         record.plies.append(
