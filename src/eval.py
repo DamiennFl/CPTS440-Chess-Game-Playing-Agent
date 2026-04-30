@@ -117,6 +117,25 @@ PST: dict[int, list[int]] = {
     chess.KING:   PST_KING_MIDDLEGAME,
 }
 
+# Total non-pawn, non-king material threshold below which we consider it an endgame.
+# Roughly: each side having at most one rook + one minor piece left (~1300 cp combined).
+_ENDGAME_MATERIAL_THRESHOLD = 1300
+
+
+def _is_endgame(board: chess.Board) -> bool:
+    """
+    Return True when the position is an endgame.
+
+    Calculated as the sum of non-pawn, non-king material for *both* sides
+    combined.  When that total falls at or below _ENDGAME_MATERIAL_THRESHOLD
+    (≈ rook + minor piece per side) the king should become active.
+    """
+    total = 0
+    for piece in board.piece_map().values():
+        if piece.piece_type not in (chess.PAWN, chess.KING):
+            total += PIECE_VALUES[piece.piece_type]
+    return total <= _ENDGAME_MATERIAL_THRESHOLD
+
 
 def evaluate(board: chess.Board, *, use_pst: bool = True) -> float:
     """
