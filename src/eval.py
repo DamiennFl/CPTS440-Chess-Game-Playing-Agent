@@ -287,34 +287,64 @@ def _king_safety_score(board: chess.Board, color: chess.Color) -> int:
     return score
 
 
-def evaluate(board: chess.Board, *, use_pst: bool = True) -> float:
+def evaluate(
+    board: chess.Board,
+    *,
+    use_pst: bool = True,
+    use_pawn_structure: bool = True,
+    use_mobility: bool = True,
+    use_king_safety: bool = True,
+) -> float:
     """
     Return a heuristic score from White's perspective.
 
     Terminal positions return large-magnitude scores (checkmate) or 0 (draw).
-    Non-terminal positions combine material balance with piece-square table
-    bonuses: each piece's value is its material worth plus a positional bonus
-    that rewards good squares (center control, king safety, piece activity).
-    Black's PST values are mirrored vertically via `square ^ 56`.
+    Non-terminal positions sum up:
 
-    Args:
-        board: position to evaluate.
-        use_pst: if False, only material values are used (no positional bonus).
+    1. **Material:** piece values for both sides.
+    2. **Piece-square tables (PST):** positional bonuses; king uses the
+       endgame table when _is_endgame() is True (toggle: use_pst).
+    3. **Pawn structure:** doubled/isolated pawn penalties, passed-pawn
+       bonuses (toggle: use_pawn_structure).
+    4. **Mobility:** bonus proportional to the difference in legal move
+       counts (toggle: use_mobility).
+    5. **King safety:** penalty for open/half-open files near the king
+       (toggle: use_king_safety).
+
+    All scores are from White's perspective (positive = White is better).
+    Black's PST values are mirrored vertically via `square ^ 56`.
     """
     if board.is_checkmate():
         return -1_000_000.0 if board.turn == chess.WHITE else 1_000_000.0
     if board.is_stalemate() or board.is_insufficient_material():
         return 0.0
 
+    endgame = _is_endgame(board)
+
     score = 0
     for square, piece in board.piece_map().items():
         material = PIECE_VALUES[piece.piece_type]
         if use_pst:
             pst_square = square if piece.color == chess.WHITE else square ^ 56
-            positional = PST[piece.piece_type][pst_square]
+            if piece.piece_type == chess.KING:
+                pst_table = PST_KING_ENDGAME if endgame else PST_KING_MIDDLEGAME
+            else:
+                pst_table = PST[piece.piece_type]
+            positional = pst_table[pst_square]
         else:
             positional = 0
         value = material + positional
         score += value if piece.color == chess.WHITE else -value
+
+    if use_pawn_structure:
+        score += _pawn_structure_score(board, chess.WHITE)
+        score -= _pawn_structure_score(board, chess.BLACK)
+
+    if use_mobility:
+        score += _mobility_score(board)
+
+    if use_king_safety and not endgame:
+        score += _king_safety_score(board, chess.WHITE)
+        score -= _king_safety_score(board, chess.BLACK)
 
     return float(score)
