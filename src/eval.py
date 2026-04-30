@@ -213,6 +213,35 @@ def _pawn_structure_score(board: chess.Board, color: chess.Color) -> int:
     return score
 
 
+# Mobility bonus per legal move (centipawns).
+_MOBILITY_BONUS_PER_MOVE = 4
+
+
+def _mobility_score(board: chess.Board) -> int:
+    """
+    Return a mobility score from White's perspective (centipawns).
+
+    Counts the number of legal moves available to each side and returns
+    (white_moves - black_moves) * _MOBILITY_BONUS_PER_MOVE.
+
+    To count the opponent's moves we temporarily flip the turn.  This is
+    safe because we never push a move and we only read legal_moves.
+    """
+    # Moves for the side currently to move.
+    if board.turn == chess.WHITE:
+        white_moves = board.legal_moves.count()
+        board.turn = chess.BLACK
+        black_moves = board.legal_moves.count()
+        board.turn = chess.WHITE
+    else:
+        black_moves = board.legal_moves.count()
+        board.turn = chess.WHITE
+        white_moves = board.legal_moves.count()
+        board.turn = chess.BLACK
+
+    return (white_moves - black_moves) * _MOBILITY_BONUS_PER_MOVE
+
+
 def evaluate(board: chess.Board, *, use_pst: bool = True) -> float:
     """
     Return a heuristic score from White's perspective.
