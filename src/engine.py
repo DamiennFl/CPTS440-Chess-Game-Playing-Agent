@@ -81,7 +81,7 @@ def play_game(
             time_limit=time_limit,
             use_alpha_beta=use_alpha_beta,
         )
-        if result.move is None:
+        if result.move is None or board.can_claim_draw():
             break
 
         record.plies.append(
