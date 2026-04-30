@@ -72,7 +72,7 @@ def play_game(
     record = GameRecord()
 
     for _ in range(max_moves * 2):  # max_moves full moves = 2x half-moves
-        if board.is_game_over():
+        if board.is_game_over(claim_draw=True):
             break
 
         result = choose_move(
