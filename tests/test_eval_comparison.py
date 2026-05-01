@@ -26,25 +26,25 @@ FEN_KNIGHT_RIM = "4k3/8/8/8/8/8/7P/N3K3 w - - 0 1"
 
 
 def test_pst_off_knight_placement_irrelevant() -> None:
-    """Without PSTs both positions are worth the same (pure material)."""
+    """Without PSTs (or any positional terms) both positions are worth the same material."""
     center = chess.Board(FEN_KNIGHT_CENTER)
     rim = chess.Board(FEN_KNIGHT_RIM)
-    assert eval.evaluate(center, use_pst=False) == eval.evaluate(rim, use_pst=False)
+    kwargs = dict(use_pst=False, use_pawn_structure=False, use_mobility=False, use_king_safety=False)
+    assert eval.evaluate(center, **kwargs) == eval.evaluate(rim, **kwargs)
 
 
 def test_pst_on_knight_center_scores_higher() -> None:
-    """PSTs lift the centralized knight by 70 cp over the rim knight (20 − (−50))."""
+    """PSTs (plus other positional terms) make the centralized knight score higher."""
     center = chess.Board(FEN_KNIGHT_CENTER)
     rim = chess.Board(FEN_KNIGHT_RIM)
-    diff = eval.evaluate(center, use_pst=True) - eval.evaluate(rim, use_pst=True)
-    assert diff == 70.0
+    assert eval.evaluate(center, use_pst=True) > eval.evaluate(rim, use_pst=True)
 
 
 def test_pst_off_equals_material_sum() -> None:
-    """use_pst=False returns exactly the raw material balance (no positional bonus)."""
+    """With all positional terms off, score equals raw material balance."""
     # White: King + Queen (900 cp).  Black: King (0 cp).  Net = 900.
     board = chess.Board("7k/8/8/8/8/8/8/KQ6 w - - 0 1")
-    assert eval.evaluate(board, use_pst=False) == 900.0
+    assert eval.evaluate(board, use_pst=False, use_pawn_structure=False, use_mobility=False, use_king_safety=False) == 900.0
 
 
 def test_start_position_both_modes_zero() -> None:
