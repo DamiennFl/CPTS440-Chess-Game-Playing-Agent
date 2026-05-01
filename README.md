@@ -2,12 +2,14 @@
 
 Adversarial-search chess engine built on `python-chess`:
 
-- Depth-limited minimax with alpha-beta pruning and simple move ordering
-- Material-based evaluation (centipawns) and terminal scoring
-- AI-vs-AI driver with game logging and HTML replay export
-- Structured experiment runner for baseline-vs-improved and depth/time matrices
-- Minimal CLI for FEN loading, listing/applying moves
-- Tests covering board helpers, evaluation, search sanity/perf, engine plumbing, and node-expansion comparisons
+- Depth-limited minimax with alpha-beta pruning and deterministic MVV-LVA move ordering
+- Evaluation function combining material, piece-square tables (PSTs), pawn structure, mobility, and king safety
+- Iterative deepening with time-limited search
+- AI-vs-AI game driver with per-move depth and timing metrics, HTML replay export
+- Human-vs-AI interactive play via CLI or notebook
+- Structured experiment runner for baseline-vs-improved and depth/time comparison matrices
+- CLI for board inspection (`--mode inspect`) and interactive play (`--mode human`)
+- Tests covering board helpers, evaluation, search correctness and performance, engine plumbing, and node-expansion comparisons
 
 ## Setup
 
@@ -80,21 +82,14 @@ pytest
 ## Project Structure
 
 - `src/board.py`: board representation helpers and legal move utilities
-- `src/search.py`: depth-limited minimax, alpha-beta pruning, move ordering, SearchResult wrapper
-- `src/eval.py`: terminal handling + material evaluation (centipawns)
-- `src/engine.py`: top-level move selection; AI-vs-AI game runner
-- `src/viz.py`: HTML replay generator for GameRecord
+- `src/search.py`: depth-limited minimax, alpha-beta pruning, iterative deepening, move ordering, `SearchResult` wrapper
+- `src/eval.py`: evaluation function — material, piece-square tables, pawn structure, mobility, and king safety
+- `src/engine.py`: top-level move selection, AI-vs-AI game runner (`play_game`), human-vs-AI runner (`play_human_vs_ai`), `GameRecord` with aggregate metrics
+- `src/viz.py`: HTML replay generator for `GameRecord`
 - `src/experiments.py`: structured AI-vs-AI batch runner and HTML/CSV/JSON report generation
-- `src/ui.py`: command-line interface — board inspection (`--mode inspect`) and interactive human-vs-AI play (`--mode human`)
+- `src/ui.py`: CLI — board inspection (`--mode inspect`) and interactive human-vs-AI play (`--mode human`)
 - `tests/`: smoke and correctness checks
-- `demo.ipynb`: notebook scratchpad for quick experiments
-
-## Deliverables
-
-- Run the structured matchup matrix, export `artifacts/experiments/experiment_summary.json`, `experiment_summary.csv`, and `experiment_report.html`.
-- Finalize the notebook flow in `demo.ipynb`, reuse the generated HTML report and replay artifacts in the presentation, and keep the report claims aligned with the exported metrics.
-- Slides: use [PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md) as the slide sequence and rehearsal checklist.
-- Practice presentation: use the notebook sections as the demo script and rehearse with the generated HTML report open side-by-side.
+- `demo.ipynb`: demonstration notebook covering engine overview, tactical puzzles, depth comparison, alpha-beta vs minimax, AI-vs-AI game replay, positional evaluation, structured experiments, and human-vs-AI play
 
 ## Notes
 - Centipawn (scoring used for move evaluation): https://chess.fandom.com/wiki/Centipawn
