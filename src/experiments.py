@@ -419,7 +419,7 @@ def render_report_html(summaries: Sequence[MatchupSummary]) -> str:
 <html lang='en'>
 <head>
 <meta charset='utf-8'>
-<title>Week 6 Experiment Report</title>
+<title>AI-vs-AI Experiment Report</title>
 <style>
   body {{
     font-family: system-ui, -apple-system, sans-serif;
@@ -442,7 +442,7 @@ def render_report_html(summaries: Sequence[MatchupSummary]) -> str:
 </head>
 <body>
 <div class='container'>
-  <h1>Week 6 AI-vs-AI Experiment Report</h1>
+  <h1>AI-vs-AI Experiment Report</h1>
   <p class='subtitle'>Structured matchup summaries with outcome distributions, average search effort, and per-game metrics.</p>
   {body}
 </div>
@@ -450,8 +450,8 @@ def render_report_html(summaries: Sequence[MatchupSummary]) -> str:
 </html>"""
 
 
-def build_week6_default_matchups(games: int = 100) -> list[MatchupSpec]:
-    """Convenience matchups for the Week 6 experiment matrix."""
+def build_default_matchups(games: int = 100) -> list[MatchupSpec]:
+    """Default matchups for the experiment matrix."""
     baseline = StrategySpec(label="Baseline Minimax d3", depth=3, use_alpha_beta=False)
     improved = StrategySpec(label="Improved AlphaBeta d3", depth=3, use_alpha_beta=True)
     shallow = StrategySpec(label="Improved AlphaBeta d2", depth=2, use_alpha_beta=True)
@@ -471,7 +471,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--out-dir", default="artifacts/experiments", help="Output directory for JSON/CSV/HTML results.")
     args = parser.parse_args(argv)
 
-    summaries = run_matchups(build_week6_default_matchups(games=args.games))
+    summaries = run_matchups(build_default_matchups(games=args.games))
     paths = write_metrics_bundle(summaries, args.out_dir)
 
     print(f"Wrote experiment JSON: {paths['json']}")

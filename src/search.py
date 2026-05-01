@@ -17,7 +17,6 @@ class SearchResult:
     score: float
     nodes: int
     depth: int
-    # Week 5: wall-clock time for this move search, used by Week 6 experiments/reports.
     elapsed: float = 0.0
 
 
@@ -75,7 +74,6 @@ def order_moves(board: chess.Board) -> list[chess.Move]:
 
     Priority favors captures (MVV-LVA style), checking moves, then promotions.
     """
-    # Week 5: upgraded from basic capture/check sort to deterministic MVV-LVA style ordering.
     legal = list(board.legal_moves)
     legal.sort(key=lambda m: _move_priority(board, m), reverse=True)
     return legal
@@ -296,7 +294,7 @@ def choose_move(
             elapsed=time.perf_counter() - start_time,
         )
 
-    # Week 5: iterative deepening for time-limited search. We return the deepest
+    # Iterative deepening for time-limited search. We return the deepest
     # fully completed iteration rather than a partially searched tree.
     budget = max(0.0, time_limit)
     deadline = time.perf_counter() + budget

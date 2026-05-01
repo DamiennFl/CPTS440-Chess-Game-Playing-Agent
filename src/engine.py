@@ -17,7 +17,7 @@ def choose_move(
     use_alpha_beta: bool = True,
 ) -> SearchResult:
     """Top-level engine hook for move selection."""
-    # Week 5/6 passthrough: preserve search configuration for experiments
+    # Passthrough: preserve search configuration for experiments
     # (fixed depth vs time-limited iterative deepening, and AB vs minimax).
     return search_choose_move(
         board,
@@ -35,7 +35,7 @@ class PlayRecord:
     move_uci: str
     score: float
     nodes: int
-    # Week 6 telemetry: per-move search time and depth for experiment and replay reporting.
+    # Per-move search time and depth for experiment and replay reporting.
     elapsed: float = 0.0
     depth: int = 0
 

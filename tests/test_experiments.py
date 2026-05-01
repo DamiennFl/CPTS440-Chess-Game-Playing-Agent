@@ -38,4 +38,4 @@ def test_write_metrics_bundle_creates_files() -> None:
         assert paths["json"].exists()
         assert paths["csv"].exists()
         assert paths["html"].exists()
-        assert "Week 6 AI-vs-AI Experiment Report" in paths["html"].read_text(encoding="utf-8")
+        assert "AI-vs-AI Experiment Report" in paths["html"].read_text(encoding="utf-8")

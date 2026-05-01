@@ -1,6 +1,6 @@
 # CPTS 440 Chess Game-Playing Agent
 
-Adversarial-search chess engine built on `python-chess`, currently at the Week 2 milestone:
+Adversarial-search chess engine built on `python-chess`:
 
 - Depth-limited minimax with alpha-beta pruning and simple move ordering
 - Material-based evaluation (centipawns) and terminal scoring
@@ -62,11 +62,11 @@ pip install -e ".[dev]"
   export_game_html(game, "out/game.html")  # Open in browser to step through moves
   ```
 
-- Week 6 experiments + report generation
+- Experiments and report generation
   ```python
-  from src.experiments import build_week6_default_matchups, run_matchups, write_metrics_bundle
+  from src.experiments import build_default_matchups, run_matchups, write_metrics_bundle
 
-  summaries = run_matchups(build_week6_default_matchups(games=100))
+  summaries = run_matchups(build_default_matchups(games=100))
   paths = write_metrics_bundle(summaries, "artifacts/experiments")
   print(paths["html"])  # Open the experiment report in a browser
   ```
@@ -89,11 +89,11 @@ pytest
 - `tests/`: smoke and correctness checks
 - `demo.ipynb`: notebook scratchpad for quick experiments
 
-## Week 6 / Week 7 Deliverables
+## Deliverables
 
-- Week 6: run the structured matchup matrix, export `artifacts/experiments/experiment_summary.json`, `experiment_summary.csv`, and `experiment_report.html`.
-- Week 7: finalize the notebook flow in `demo.ipynb`, reuse the generated HTML report and replay artifacts in the presentation, and keep the report claims aligned with the exported metrics.
-- Week 7 slides: use [PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md) as the slide sequence and rehearsal checklist.
+- Run the structured matchup matrix, export `artifacts/experiments/experiment_summary.json`, `experiment_summary.csv`, and `experiment_report.html`.
+- Finalize the notebook flow in `demo.ipynb`, reuse the generated HTML report and replay artifacts in the presentation, and keep the report claims aligned with the exported metrics.
+- Slides: use [PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md) as the slide sequence and rehearsal checklist.
 - Practice presentation: use the notebook sections as the demo script and rehearse with the generated HTML report open side-by-side.
 
 ## Notes
